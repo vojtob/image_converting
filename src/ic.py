@@ -23,6 +23,7 @@ def __add_project(args):
     args.svgplantumldir = args.svgdir / 'plantuml'
     args.svgsvgdir      = args.svgdir / 'svg'
     args.svgarchidir    = args.svgdir / 'archi'
+    args.alldir = args.destdir / 'img_all'
 	# mermaind -> png
 	# png -> png
 
@@ -130,17 +131,13 @@ if __name__ == '__main__':
         convert.convert_svg(args, args.svgarchidir)
         log(args, 'done svg conversion')
 
-    # if args.command !='clean':
-    #     # publish images to img_all dir
-    #     log(args, 'start merging images')
-    #     args.alldir.mkdir(parents=True, exist_ok=True)
-    #     # copy exported images
-    #     convert.mycopy(args.pngdir, args.alldir, args)
-    #     # overwrite them with images with icons
-    #     # convert.mycopy(args.iconsdir, args.alldir, args)
-    #     # copy areas images
-    #     # convert.mycopy(args.areasdir, args.alldir, args)
-    #     log(args, 'done merginf images')
+    if args.command !='clean':
+        # publish images to img_all dir
+        log(args, 'start merging images')
+        args.alldir.mkdir(parents=True, exist_ok=True)
+        # copy exported images
+        convert.mycopy(args.pngdir, args.alldir, args)
+        log(args, 'done merginf images')
 
     if args.problems:
         print('\nci: DONE ... with PROBLEMS !!')
