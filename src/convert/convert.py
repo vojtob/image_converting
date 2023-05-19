@@ -17,6 +17,10 @@ def __img_walk(args, source_path, destination_path, orig_extension, new_extensio
 
     # walk over files in from directory
     for (dirpath, _, filenames) in os.walk(source_path):
+        p = Path(dirpath)
+        (_, tail) = os.path.split(p)
+        if str(tail) == 'old':
+            continue
         # create destination directory
         d = Path(dirpath.replace(str(source_path), str(destination_path)))       
         d.mkdir(parents=True, exist_ok=True)
