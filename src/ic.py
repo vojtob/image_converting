@@ -64,20 +64,26 @@ if __name__ == '__main__':
     parser_mermaid = subparsers.add_parser('mermaid', help='mermaid images -> png -> png')
     parser_mermaid.set_defaults(command='mermaid')
 
+    # parser_drawio = subparsers.add_parser('drawio', help='drawio images -> drawio -> png')
+    # parser_drawio.set_defaults(command='drawio')
+
     parser_svg = subparsers.add_parser('cppng', help='copy png in source to png in dest')
     parser_svg.set_defaults(command='cppng')
 
-    parser_svg = subparsers.add_parser('cpsvg', help='copy svg in source to svg in dest  -> png')
-    parser_svg.set_defaults(command='cpsvg')
+    parser_svg = subparsers.add_parser('svg', help='convert  svg in source to png in dest  -> png')
+    parser_svg.set_defaults(command='svg')
 
     parser_svg = subparsers.add_parser('archi', help='svg/archi -> png')
     parser_svg.set_defaults(command='archi')
 
     args = parser.parse_args()
-    print(args)
-    args = __add_project(args)
     if args.debug:
         args.verbose = True
+    if args.verbose:
+        print(args)
+    args = __add_project(args)
+    if args.debug:
+        print(args)
 
     if not hasattr(args, 'command'):
         args.command = 'all'
@@ -109,17 +115,23 @@ if __name__ == '__main__':
         convert.convert_svg(args, args.svgplantumldir)
         log(args, 'done plantUML conversion')
 
+    # if (args.command=='drawio') or (args.command=='all'):
+    #     log(args, 'start conversion from drawio into png')
+    #     # convert from drawio to png
+    #     convert.convert_drawio(args)
+    #     log(args, 'done drawio conversion')
+
     if (args.command=='mermaid') or (args.command=='all'):
         log(args, 'start mermaid')
         # convert from mmd to png
         convert.convert_mmd(args)
         log(args, 'done mermaid')
 
-    if (args.command=='cpsvg') or (args.command=='all'):
-        log(args, 'start copy svg')
+    if (args.command=='svg') or (args.command=='all'):
+        log(args, 'start convert svg')
         convert.copy_svg(args)
         convert.convert_svg(args, args.svgsvgdir)
-        log(args, 'done svg copy')
+        log(args, 'done convert copy')
 
     if (args.command=='cppng') or (args.command=='all'):
         log(args, 'start copy png')

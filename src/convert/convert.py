@@ -3,6 +3,7 @@ import os
 from pathlib import PureWindowsPath, Path
 import subprocess
 import shutil
+import re
 
 movefiles = []
 
@@ -12,6 +13,7 @@ def __img_walk(args, source_path, destination_path, orig_extension, new_extensio
     if(args.file):
         processedFile = False
         pf = Path(source_path, args.file)
+        pf = str(pf).replace('\\', '/')
         if args.debug:
             print("match file path", pf)
 
@@ -29,7 +31,12 @@ def __img_walk(args, source_path, destination_path, orig_extension, new_extensio
             # ffrom is original full name with path and orig extension
             ffrom = os.path.join(dirpath, f)
             if(args.file):
-                if Path(ffrom).with_suffix('') != pf:
+                # if Path(ffrom).with_suffix('') != pf:
+                x = str(Path(ffrom).with_suffix('')).replace('\\', '/')
+                if args.debug:
+                    print("pattern", pf)
+                    print("string", x)
+                if not re.match(pf, x):
                     # we want to process a specific file, but not this
                     # print('skip file ', imgdef['fileName'], args.file)
                     # continue
@@ -81,6 +88,20 @@ def onfile_convert_plantuml(args, fromfile, tofile, orig_extension, new_extensio
     if args.debug:
         print(cmd)
     subprocess.run(cmd, shell=True)
+
+def onfile_convert_drawio(args, fromfile, tofile, orig_extension, new_extension):
+    # density = 144
+    # if args.poster:
+    #     density = int(density * args.poster)
+    svg_command = '"c:\Program Files\draw.io\draw.io.exe" -x -o "{destfile}" {srcfile}'
+    cmd = svg_command.format(srcfile=fromfile, destfile=tofile)
+
+    # svg_command = 'inkscape --export-type="png" {srcfile}'
+    # cmd = svg_command.format(srcfile=fromfile)
+
+    if args.debug:
+        print(cmd)
+    subprocess.run(cmd, shell=False)
 
 def onfile_convert_copy(args, fromfile, tofile, orig_extension, new_extension):
     shutil.copy(fromfile, tofile)
@@ -136,6 +157,13 @@ def convert_mmd(args):
     __img_walk(args, 
         args.sourcedir, args.pngdir, 
         '.mmd', '.png', onfile_convert_mmd)
+
+def convert_drawio(args):
+    # convert mm files to png files
+    # args.problems.append('mermaid NOT ACTIVATED')
+    __img_walk(args, 
+        args.sourcedir, args.pngdir, 
+        '.drawio', '.png', onfile_convert_drawio)
 
 def convert_plantuml(args):
     # convert plantUML files to SVG files
