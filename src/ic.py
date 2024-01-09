@@ -23,6 +23,7 @@ def __add_project(args):
     args.svgplantumldir = args.svgdir / 'plantuml'
     args.svgsvgdir      = args.svgdir / 'svg'
     args.svgarchidir    = args.svgdir / 'archi'
+    # args.svgdrawiodir    = args.svgdir / 'drawio'
     args.alldir = args.destdir / 'img_all'
 	# mermaind -> png
 	# png -> png
@@ -64,8 +65,8 @@ if __name__ == '__main__':
     parser_mermaid = subparsers.add_parser('mermaid', help='mermaid images -> png -> png')
     parser_mermaid.set_defaults(command='mermaid')
 
-    # parser_drawio = subparsers.add_parser('drawio', help='drawio images -> drawio -> png')
-    # parser_drawio.set_defaults(command='drawio')
+    parser_drawio = subparsers.add_parser('drawio', help='drawio images -> drawio -> png')
+    parser_drawio.set_defaults(command='drawio')
 
     parser_svg = subparsers.add_parser('cppng', help='copy png in source to png in dest')
     parser_svg.set_defaults(command='cppng')
@@ -92,7 +93,7 @@ if __name__ == '__main__':
     if args.command=='clean':
         log(args, 'start cleaning')
 
-        for dirname in [args.svgumletdir, args.svgplantumldir, 
+        for dirname in [args.svgumletdir, args.svgplantumldir, # args.svgdrawiodir, 
 		args.svgsvgdir, args.pngdir]:
             p = args.projectdir / dirname
             if p.exists():
@@ -115,16 +116,18 @@ if __name__ == '__main__':
         convert.convert_svg(args, args.svgplantumldir)
         log(args, 'done plantUML conversion')
 
-    # if (args.command=='drawio') or (args.command=='all'):
-    #     log(args, 'start conversion from drawio into png')
-    #     # convert from drawio to png
-    #     convert.convert_drawio(args)
-    #     log(args, 'done drawio conversion')
+    if (args.command=='drawio') or (args.command=='all'):
+        log(args, 'start conversion from drawio into png')
+        # convert from drawio to png
+        convert.convert_drawio(args)
+        # convert.convert_svg(args, args.svgdrawiodir)
+        log(args, 'done drawio conversion')
 
     if (args.command=='mermaid') or (args.command=='all'):
         log(args, 'start mermaid')
-        # convert from mmd to png
+        # convert from mmd to svg -> png
         convert.convert_mmd(args)
+        convert.convert_svg(args, args.svgplantumldir)
         log(args, 'done mermaid')
 
     if (args.command=='svg') or (args.command=='all'):

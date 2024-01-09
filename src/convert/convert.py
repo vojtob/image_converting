@@ -90,11 +90,10 @@ def onfile_convert_plantuml(args, fromfile, tofile, orig_extension, new_extensio
     subprocess.run(cmd, shell=True)
 
 def onfile_convert_drawio(args, fromfile, tofile, orig_extension, new_extension):
-    # density = 144
-    # if args.poster:
-    #     density = int(density * args.poster)
-    svg_command = '"c:\Program Files\draw.io\draw.io.exe" -x -o "{destfile}" {srcfile}'
-    cmd = svg_command.format(srcfile=fromfile, destfile=tofile)
+    drawio_command = '"C:\Program Files\draw.io\draw.io.exe" -x -s {scale} -o "{destfile}" {srcfile}'
+    cmd = drawio_command.format(scale=(args.poster if args.poster else 1.0), srcfile=fromfile, destfile=tofile)
+    # drawio_command = '"C:\Program Files\draw.io\draw.io.exe" -x -o "{destfile}" {srcfile}'
+    # cmd = drawio_command.format(srcfile=fromfile, destfile=tofile)
 
     # svg_command = 'inkscape --export-type="png" {srcfile}'
     # cmd = svg_command.format(srcfile=fromfile)
