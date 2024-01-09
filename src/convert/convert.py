@@ -90,7 +90,7 @@ def onfile_convert_plantuml(args, fromfile, tofile, orig_extension, new_extensio
     subprocess.run(cmd, shell=True)
 
 def onfile_convert_drawio(args, fromfile, tofile, orig_extension, new_extension):
-    drawio_command = '"C:\Program Files\draw.io\draw.io.exe" -x -s {scale} -o "{destfile}" {srcfile}'
+    drawio_command = '"C:\Program Files\draw.io\draw.io.exe" -x -s {scale} -b 10 -o "{destfile}" {srcfile}'
     cmd = drawio_command.format(scale=(args.poster if args.poster else 1.0), srcfile=fromfile, destfile=tofile)
     # drawio_command = '"C:\Program Files\draw.io\draw.io.exe" -x -o "{destfile}" {srcfile}'
     # cmd = drawio_command.format(srcfile=fromfile, destfile=tofile)
