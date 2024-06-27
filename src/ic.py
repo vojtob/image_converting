@@ -1,5 +1,5 @@
 import argparse
-from pathlib import PureWindowsPath, Path
+from pathlib import Path
 import shutil
 
 from convert import convert
@@ -13,23 +13,28 @@ def log(args, message):
 def __add_project(args):
     if not 'projectdir' in args:
         args.projectdir = Path.cwd().parent
+        if args.projectdir.stem == 'utils':
+            args.projectdir = args.projectdir.parent
+        if args.projectdir.stem == 'img':
+            args.projectdir = args.projectdir.parent
+        if args.projectdir.stem == 'src_doc':
+            args.projectdir = args.projectdir.parent
     else:
         args.projectdir = Path(args.projectdir)
+    
     args.sourcedir = args.projectdir / 'src_doc' / 'img'
     args.destdir = args.projectdir / 'temp'
 
     args.svgdir = args.destdir / 'img_svg'
+    args.alldir = args.destdir / 'img_all'
+    args.pngdir = args.destdir / 'img_png'
+
     args.svgumletdir    = args.svgdir / 'umlet'
     args.svgplantumldir = args.svgdir / 'plantuml'
     args.svgsvgdir      = args.svgdir / 'svg'
     args.svgarchidir    = args.svgdir / 'archi'
     # args.svgdrawiodir    = args.svgdir / 'drawio'
-    args.alldir = args.destdir / 'img_all'
-	# mermaind -> png
-	# png -> png
-
-    args.pngdir = args.destdir / 'img_png'
-
+	
     args.projectname = args.projectdir.stem
     args.icpath = Path(__file__).parent.parent
     args.problems = []
