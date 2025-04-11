@@ -49,8 +49,7 @@ def onfile_convert_svg(args, fromfile, tofile, orig_extension, new_extension):
     density = 144
     if args.poster:
         density = int(density * args.poster)
-    svg_command = 'magick -density {density} {srcfile} {destfile}'
-    cmd = svg_command.format(srcfile=fromfile, destfile=tofile, density=density)
+    cmd = f'magick -density {density} {fromfile} {tofile}'
 
     # svg_command = 'inkscape --export-type="png" {srcfile}'
     # cmd = svg_command.format(srcfile=fromfile)
@@ -80,23 +79,19 @@ def onfile_convert_mmd(args, fromfile, tofile, orig_extension, new_extension):
 
 def onfile_convert_plantuml(args, fromfile, tofile, orig_extension, new_extension):
     # mmPath = os.path.join('C:/', 'prg', 'mermaid', 'node_modules', 'mermaid.cli', 'index.bundle.js')
-    pupath = str(Path('C:/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'))
+    # pupath = str(Path('C:/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'))
     # pucmd = 'java -jar {p} -tsvg {srcfile}'
     # cmd = pucmd.format(srcfile=fromfile, p=pupath)
-    pucmd = 'cat {srcfile} | java -jar {p} -tsvg -pipe > {destfile}'
-    cmd = pucmd.format(srcfile=fromfile, destfile=tofile, p=pupath)
+    # pucmd = 'cat {srcfile} | java -jar {p} -tsvg -pipe > {destfile}'
+    # cmd = pucmd.format(srcfile=fromfile, destfile=tofile, p=pupath)
+    pupath = str(Path('C:/prg/plantuml/plantuml-mit-1.2025.2.jar'))
+    cmd = f'cat {fromfile} | java -jar {pupath} -tsvg -pipe > {tofile}'
     if args.debug:
         print(cmd)
     subprocess.run(cmd, shell=True)
 
 def onfile_convert_drawio(args, fromfile, tofile, orig_extension, new_extension):
-    drawio_command = '"C:\Program Files\draw.io\draw.io.exe" -x -s {scale} -b 10 -o "{destfile}" {srcfile}'
-    cmd = drawio_command.format(scale=(args.poster if args.poster else 1.0), srcfile=fromfile, destfile=tofile)
-    # drawio_command = '"C:\Program Files\draw.io\draw.io.exe" -x -o "{destfile}" {srcfile}'
-    # cmd = drawio_command.format(srcfile=fromfile, destfile=tofile)
-
-    # svg_command = 'inkscape --export-type="png" {srcfile}'
-    # cmd = svg_command.format(srcfile=fromfile)
+    cmd = f'"C:\\Program Files\\draw.io\\draw.io.exe" -x --transparent -s {args.poster if args.poster else 1.0} -b 10 -o "{tofile}" {fromfile}'
 
     if args.debug:
         print(cmd)

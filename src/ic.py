@@ -107,7 +107,8 @@ if __name__ == '__main__':
                     print('delete', p)
         log(args, 'done cleaning')
 
-    if (args.command=='umlet') or (args.command=='all'):
+    # if (args.command=='umlet') or (args.command=='all'):
+    if (args.command=='umlet'):
         log(args, 'start umlet')
         # convert from uxf to png
         convert.convert_uml(args)
