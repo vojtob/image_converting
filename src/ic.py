@@ -98,8 +98,9 @@ if __name__ == '__main__':
     if args.command=='clean':
         log(args, 'start cleaning')
 
-        for dirname in [args.svgumletdir, args.svgplantumldir, # args.svgdrawiodir, 
-		args.svgsvgdir, args.pngdir]:
+        dirs2clean = [args.svgumletdir, args.svgplantumldir, # args.svgdrawiodir, 
+            		args.svgsvgdir, args.pngdir]
+        for dirname in dirs2clean:
             p = args.projectdir / dirname
             if p.exists():
                 shutil.rmtree(p)
@@ -107,8 +108,8 @@ if __name__ == '__main__':
                     print('delete', p)
         log(args, 'done cleaning')
 
-    # if (args.command=='umlet') or (args.command=='all'):
-    if (args.command=='umlet'):
+    if (args.command=='umlet') or (args.command=='all'):
+    # if (args.command=='umlet'):
         log(args, 'start umlet')
         # convert from uxf to png
         convert.convert_uml(args)
